@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/from_text"
+        android:textSize="18sp"
+        android:layout_width="70dp"
+        android:gravity="center"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="38dp"
+        android:layout_marginTop="86dp"
+        android:text="FROM"
+        android:textColor="#000000"/>
+
+    <EditText
+        android:id="@+id/from_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/from_text"
+        android:layout_alignBottom="@+id/from_text"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="23dp"
+        android:ems="10"
+        android:inputType="date" />
+
+    <TextView
+        android:textColor="#000000"
+        android:id="@+id/to_text"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/from_text"
+        android:layout_below="@+id/from_date"
+        android:layout_marginTop="49dp"
+        android:text="TO" />
+
+    <EditText
+        android:id="@+id/to_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/from_date"
+        android:layout_below="@+id/from_date"
+        android:layout_marginTop="35dp"
+        android:ems="10"
+        android:inputType="date" />
+
+    <TextView
+        android:id="@+id/limit_text"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        android:layout_width="70dp"
+        android:gravity="center"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/to_text"
+        android:layout_below="@+id/to_date"
+        android:layout_marginTop="54dp"
+        android:text="LIMIT" />
+
+    <EditText
+        android:id="@+id/limit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/limit_text"
+        android:layout_alignBottom="@+id/limit_text"
+        android:layout_alignStart="@+id/to_date"
+        android:ems="10"
+        android:inputType="number" />
+
+</RelativeLayout>
