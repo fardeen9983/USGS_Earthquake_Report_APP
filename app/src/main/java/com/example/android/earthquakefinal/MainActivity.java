@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,14 +22,29 @@ public class MainActivity extends AppCompatActivity {
     private final String url1 =
             "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventtype=earthquake&orderby=time&minmag=3&limit=100",
             url = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventtype=earthquake&orderby=time&minmag=3&limit=100";
+    private Button done;
+    private EditText from_date;
+    private EditText to_date;
+    private EditText limit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.params_page);
         listView = findViewById(R.id.list_item);
-        earthquakeTask = new EarthquakeTask();
-        earthquakeTask.execute(url);
+        done = findViewById(R.id.button);
+        from_date = findViewById(R.id.from_date);
+        to_date= findViewById(R.id.to_date);
+        limit =findViewById(R.id.limit);
+
+        done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                earthquakeTask = new EarthquakeTask();
+                earthquakeTask.execute(url);
+            }
+        });
+
     }
 
     private class EarthquakeTask extends AsyncTask<String, Void, ArrayList<Earthquake>> {
