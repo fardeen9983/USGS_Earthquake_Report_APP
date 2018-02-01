@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -84,7 +85,7 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
         int colorResourceId = ContextCompat.getColor(getContext(),colorId);
         GradientDrawable gradientDrawable = (GradientDrawable) magnitude.getBackground();
         gradientDrawable.setColor(colorResourceId);
-        magnitude.setText(earthquake.getMagnitude() + "");
+        magnitude.setText(reduceDecimalDegits(earthquake.getMagnitude()));
         location1.setText(loc[0]);
         location2.setText(loc[1]);
         time.setText(convertDateToString(earthquake.getDate()));
@@ -92,6 +93,10 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
         return root;
     }
 
+    private String reduceDecimalDegits(double x){
+        DecimalFormat decimalFormat =new DecimalFormat("0.0");
+        return decimalFormat.format(x);
+    }
     private String convertDateToString(Date date) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMM dd, yyyy - h:mm a");
         return simpleDateFormat.format(date);

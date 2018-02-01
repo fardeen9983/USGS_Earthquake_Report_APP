@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
     private ListView listView;
     private EarthquakeAdapter earthquakeAdapter;
     private final String url =
-            "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventtype=earthquake&orderby=time&minmag=6&limit=10";
+            "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventtype=earthquake&orderby=time&minmag=3&limit=100";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
