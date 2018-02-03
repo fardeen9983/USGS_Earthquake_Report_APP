@@ -40,6 +40,7 @@
         android:text="TO" />
 
     <EditText
+        android:hint="2000-12-"
         android:id="@+id/to_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -69,6 +70,7 @@
         android:layout_alignBottom="@+id/limit_text"
         android:layout_alignStart="@+id/to_date"
         android:ems="10"
+        android:hint="10"
         android:inputType="number" />
 
     <Button

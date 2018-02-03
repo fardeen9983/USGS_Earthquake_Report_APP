@@ -1,69 +1,64 @@
 package com.example.android.earthquakefinal;
 
+import android.app.LoaderManager;
+import android.app.LoaderManager.LoaderCallbacks;
+import android.content.Loader;
 import android.content.Intent;
+import android.content.Loader;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
-    private EarthquakeTask earthquakeTask;
+
+public class MainActivity extends AppCompatActivity implements LoaderCallbacks<ArrayList<Earthquake>> {
     private ListView listView;
+    private ArrayList<Earthquake> earthquakes;
     private EarthquakeAdapter earthquakeAdapter;
-    private final String url1 =
-            "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventtype=earthquake&orderby=time&minmag=3&limit=100",
-            url = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventtype=earthquake&orderby=time&minmag=3&limit=100";
-    private Button done;
-    private EditText from_date;
-    private EditText to_date;
-    private EditText limit;
+    private String url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.params_page);
+        Intent intent = getIntent();
+        setContentView(R.layout.activity_main);
+
+        url = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventtype=earthquake&starttime=2014-01-01&endtime=2014-02-01&limit=50";
         listView = findViewById(R.id.list_item);
-        done = findViewById(R.id.button);
-        from_date = findViewById(R.id.from_date);
-        to_date= findViewById(R.id.to_date);
-        limit =findViewById(R.id.limit);
+        earthquakeAdapter = new EarthquakeAdapter(this, new ArrayList<Earthquake>());
+        getLoaderManager().initLoader(1, null, this);
 
-        done.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                earthquakeTask = new EarthquakeTask();
-                earthquakeTask.execute(url);
-            }
-        });
-
+        listView.setAdapter(earthquakeAdapter);
     }
 
-    private class EarthquakeTask extends AsyncTask<String, Void, ArrayList<Earthquake>> {
-        @Override
-        protected ArrayList<Earthquake> doInBackground(String... strings) {
-            if (strings.length < 1 || strings[0] == null)
-                return null;
-            return FetchResult.fetchData(strings[0]);
-        }
+    @Override
+    public Loader<ArrayList<Earthquake>> onCreateLoader(int id, Bundle args) {
 
-        @Override
-        protected void onPostExecute(ArrayList<Earthquake> earthquakes) {
-            updateUI(earthquakes);
-        }
+        return new EarthquakeLoader(this, url);
     }
+
+    @Override
+    public void onLoadFinished(Loader<ArrayList<Earthquake>> loader, ArrayList<Earthquake> data) {
+        if (data != null)
+            updateUI(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<ArrayList<Earthquake>> loader) {
+        updateUI(new ArrayList<Earthquake>());
+    }
+
 
     public void updateUI(final ArrayList<Earthquake> earthquakes) {
-        earthquakeAdapter = new EarthquakeAdapter(this, earthquakes);
-        listView.setAdapter(earthquakeAdapter);
+        earthquakeAdapter.clear();
+        if (earthquakes != null && !earthquakes.isEmpty()) {
+            earthquakeAdapter.addAll(earthquakes);
+        }
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
