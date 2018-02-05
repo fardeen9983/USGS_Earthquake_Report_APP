@@ -26,6 +26,12 @@ public class FetchResult {
     private static ArrayList<Earthquake> earthquakes;
 
     public static ArrayList<Earthquake> fetchData(String url_string) {
+        Log.v(TAG,"fetchData() called");
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         earthquakes = new ArrayList<>();
         URL url = createURL(url_string);
         String json = makeHTTPConnection(url);
