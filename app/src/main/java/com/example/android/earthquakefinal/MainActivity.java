@@ -10,7 +10,11 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -27,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<A
     private TextView emptyView;
     private final String TAG = getClass().getSimpleName();
     private ProgressBar progressBar;
+    private Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,6 +92,20 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<A
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(earthquake.getUrl())));
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu,menu);
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId()==R.id.settings)
+            startActivity(new Intent(getApplicationContext(),Settings.class));
+        return super.onOptionsItemSelected(item);
     }
 
     private boolean checkConnectivity(){
