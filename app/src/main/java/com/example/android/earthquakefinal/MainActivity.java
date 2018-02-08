@@ -4,10 +4,13 @@ import android.app.LoaderManager.LoaderCallbacks;
 import android.content.Context;
 import android.content.Loader;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.preference.Preference;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -27,7 +30,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity implements LoaderCallbacks<ArrayList<Earthquake>> {
     private ListView listView;
     private EarthquakeAdapter earthquakeAdapter;
-    private String url;
+    private static final String url = "https://earthquake.usgs.gov/fdsnws/event/1/query";
     private TextView emptyView;
     private final String TAG = getClass().getSimpleName();
     private ProgressBar progressBar;
@@ -38,7 +41,6 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<A
         setContentView(R.layout.activity_main);
 
         progressBar = findViewById(R.id.progress_bar);
-        url = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventtype=earthquake&starttime=2014-01-01&endtime=2014-02-01&limit=50";
         listView = findViewById(R.id.list_item);
         earthquakeAdapter = new EarthquakeAdapter(this, new ArrayList<Earthquake>());
         emptyView = findViewById(R.id.empty_view);
@@ -56,8 +58,18 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<A
     @Override
     public Loader<ArrayList<Earthquake>> onCreateLoader(int id, Bundle args) {
         Log.v(TAG, "onCreateLoader() called");
-        return new EarthquakeLoader(this, url);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String minMagnitude = sharedPreferences.getString("min_magnitude_key","6");
+        Uri baseUri = Uri.parse(url);
+        Uri.Builder uriBuilder = baseUri.buildUpon();
+
+        uriBuilder.appendQueryParameter("format","geojson")
+                  .appendQueryParameter("limit","500")
+                  .appendQueryParameter("minmag",minMagnitude)
+                  .appendQueryParameter("orderby","time");
+        return new EarthquakeLoader(this, uriBuilder.toString());
     }
+
 
     @Override
     public void onLoadFinished(Loader<ArrayList<Earthquake>> loader, ArrayList<Earthquake> data) {
